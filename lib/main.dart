@@ -35,7 +35,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: UIColors.background,
-        fontFamily: 'Gilroy'
+        fontFamily: 'Gilroy',
+        accentColor: UIIconColors.active
       ),
       home: MyHomePage(title: 'Wash'),
     );

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cybergarden_app/UI/components/BottomSheets/reviewsBotoomSheet.dart';
 import 'package:cybergarden_app/UI/components/buttons.dart';
 import 'package:cybergarden_app/UI/components/cards/CollectorCard.dart';
 import 'package:cybergarden_app/UI/components/heading.dart';
@@ -10,6 +11,7 @@ import 'package:cybergarden_app/data/bloc/NavigationBloc.dart';
 import 'package:cybergarden_app/data/bloc/WashesBloc.dart';
 import 'package:cybergarden_app/data/models/CollectorModel.dart';
 import 'package:cybergarden_app/data/models/WashModel.dart';
+import 'package:cybergarden_app/data/repository/washesApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +19,29 @@ import 'ServicePriceCard.dart';
 import 'WashPrice.dart';
 import 'WashRaiting.dart';
 
-class WashPage extends StatelessWidget{
+class WashPage extends StatefulWidget{
   WashModel wash;
   WashPage({required this.wash});
+  WashPageState createState() => WashPageState(wash: this.wash);
+}
+
+class WashPageState extends State<WashPage>{
+  WashModel wash;
+  WashPageState({required this.wash});
+
+  dynamic reviews = [];
+
+
+  @override
+  void initState() {
+    getReviews(wash.id).then((value) => this.setState(() {
+      reviews = value;
+      print(reviews);
+    }));
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = displayHeight(context);
@@ -70,29 +92,43 @@ class WashPage extends StatelessWidget{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        defaultHeader(
-                          wash.name ,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            WashRaiting(wash.rating),
-                            SizedBox(
-                              width: 5,
+                    InkWell(
+                      onTap: (){
+                        showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(125.0),
                             ),
-                            WashPrice(wash.price_level),
-                          ],
-                        ),
-                      ],
+                            builder: (context) {
+                              return ReviewsBottomSheet(context,reviews,wash.id);
+                            });
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          defaultHeader(
+                            wash.name ,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              WashRaiting(wash.rating),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              WashPrice(wash.price_level),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+
                        InkWell(
                          child: Icon(
                            Icons.favorite,
@@ -102,6 +138,7 @@ class WashPage extends StatelessWidget{
                         SizedBox(
                           height: 5,
                         ),
+
 
                       ],
                     )
@@ -115,6 +152,7 @@ class WashPage extends StatelessWidget{
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
+
                     Container(
                       height: 20,
                     ),
@@ -128,6 +166,7 @@ class WashPage extends StatelessWidget{
                         image_url: wash.image,
                       ),
                     ),
+
                     Container(
                       height: 20,
                     ),

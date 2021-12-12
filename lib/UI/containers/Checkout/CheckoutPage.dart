@@ -13,6 +13,8 @@ import 'package:cybergarden_app/data/bloc/NavigationBloc.dart';
 import 'package:cybergarden_app/data/bloc/WashesBloc.dart';
 import 'package:cybergarden_app/data/models/CollectorModel.dart';
 import 'package:cybergarden_app/data/models/WashModel.dart';
+import 'package:cybergarden_app/data/repository/authApi.dart';
+import 'package:cybergarden_app/data/repository/washesApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -229,9 +231,10 @@ class CheckoutPageState extends State<CheckoutPage>{
                                   style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                 ),
-                                onPressed: () {
+                                onPressed: () async{
 
-                                  Navigator.push(context, new CupertinoPageRoute(builder: (context) => CheckoutPage(wash: wash)));
+                                  await createReservation(wash.id, snapshot.data!['time']);
+                                  _showMyDialog(context);
 
 
                                 }),
@@ -256,4 +259,36 @@ class CheckoutPageState extends State<CheckoutPage>{
         )
     );
   }
+}
+
+Future<void> _showMyDialog( context) async {
+  Navigator.pop(context);
+  return showDialog<void>(
+    context: context, // user must tap button!
+    builder: (BuildContext context) {
+      return new AlertDialog(
+          backgroundColor: UIColors.background,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))
+          ),
+        content:  Container(
+          height: 170,
+          padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Column(
+      children: [
+      defaultHeader("Спасибо!"),
+        SizedBox(
+          height:20,
+        ),
+        semiHeader("Мойка будет ожидать вас в указанное время. Вы всегда можете проверить детали в профиле.")
+      ],
+      ),
+      ),
+      );
+
+    },
+  );
 }

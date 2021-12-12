@@ -126,7 +126,7 @@ class ProfilePageState extends State<ProfilePage> {
                   },
                   child: menuItem(
                       context,
-                      icon :Icons.hiking_outlined,
+                      icon :Icons.history,
                       text: "История посещений"
                   ),
                 ),

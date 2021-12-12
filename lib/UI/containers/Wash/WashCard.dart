@@ -36,11 +36,22 @@ Widget WashCard(WashModel wash, BuildContext context){
           crossAxisAlignment:
           CrossAxisAlignment.start,
           children: [
-            Container(
-              child:
-              miniHeader(wash.name),
-              margin: EdgeInsets.only(bottom: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      child:
+                      miniHeader(wash.name),
+                      margin: EdgeInsets.only(bottom: 5),
+                    ),
+                  ],
+                ),
+
+              ],
             ),
+
             Row(
               children: [
                 WashRaiting(wash.rating),
@@ -55,6 +66,7 @@ Widget WashCard(WashModel wash, BuildContext context){
             CollectorAdress(
               adress: wash.address
             ),
+
             Container(
               height: 10,
             ),
@@ -63,6 +75,7 @@ Widget WashCard(WashModel wash, BuildContext context){
                 for (var a in wash.services) Padding(padding: EdgeInsets.only(right: 13, bottom: 10  ),child: WashTag(a['type_name']),) ,
               ],
             ),
+
             Container(
               height: 10,
             ),

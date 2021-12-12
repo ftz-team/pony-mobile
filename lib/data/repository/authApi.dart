@@ -1,3 +1,4 @@
+import 'package:cybergarden_app/data/repository/default.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,4 +71,16 @@ void logout() async{
   await storage.delete(key: "USER_TOKEN");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.clear();
+}
+
+Future<Map> getUser() async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String token = prefs.getString("USER_TOKEN")!;
+  Dio dio = await getApiClient();
+
+  String url = '/user/get/';
+
+  var response = await dio.get(url);
+  return response.data;
 }
